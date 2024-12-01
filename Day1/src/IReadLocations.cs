@@ -4,5 +4,5 @@ namespace Day1;
 
 internal interface IReadLocations
 {
-    IEnumerable<LocationOption> ReadLocationsFromFile(string fileName);
+    LocationOptions ReadLocationsFromFile(string fileName);
 }

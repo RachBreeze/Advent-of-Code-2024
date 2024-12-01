@@ -4,7 +4,7 @@ namespace Day1;
 
 public class ReadLocations : IReadLocations
 {
-    public IEnumerable<LocationOption> ReadLocationsFromFile(string fileName)
+    public LocationOptions ReadLocationsFromFile(string fileName)
     {
         if (string.IsNullOrEmpty(fileName))
         {
@@ -23,7 +23,7 @@ public class ReadLocations : IReadLocations
             throw new InvalidOperationException("File is empty");
         }
 
-        var locations = new List<LocationOption>();
+        var locations = new LocationOptions();
         foreach (var line in lines)
         {
             var location = ParseLine(line);

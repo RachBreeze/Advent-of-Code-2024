@@ -18,9 +18,13 @@ static void FindHistorian(IServiceProvider hostProvider)
     var processLocations = provider.GetRequiredService<IProcessLocations>();
 
     var locations = readLocations.ReadLocationsFromFile("C:\\GitHub\\Advent-Of-Code-2024\\Day1\\data\\input.txt");
-    Console.Write("Locations Found:" + locations.Count());
+    Console.WriteLine("Locations Found: " + locations.Column1Options.Count());
 
     var distance = processLocations.TotalDistance(locations);
 
-    Console.Write("Distance:" + distance);
+    Console.WriteLine("Distance: " + distance); //1830467
+
+    var similarityScore = processLocations.TotalSimilarityScore(locations);
+
+    Console.WriteLine("Similarity Score: " + similarityScore);
 }

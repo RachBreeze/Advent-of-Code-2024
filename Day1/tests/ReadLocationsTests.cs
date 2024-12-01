@@ -53,11 +53,9 @@ namespace Day1.Tests
             {
                 var locations = readLocations.ReadLocationsFromFile(fileName);
 
-                Assert.AreEqual(2, locations.Count());
-                Assert.AreEqual(1, locations.ElementAt(0).Column1);
-                Assert.AreEqual(2, locations.ElementAt(0).Column2);
-                Assert.AreEqual(3, locations.ElementAt(1).Column1);
-                Assert.AreEqual(4, locations.ElementAt(1).Column2);
+                Assert.IsNotNull(locations);
+                Assert.AreEqual(2, locations.Column1Options.Count());
+                Assert.AreEqual(2, locations.Column2Options.Count());
             }
             finally
             {

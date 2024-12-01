@@ -4,5 +4,6 @@ namespace Day1;
 
 public interface IProcessLocations
 {
-    int TotalDistance(IEnumerable<LocationOption> locations);
+    int TotalDistance(LocationOptions locations);
+    int TotalSimilarityScore(LocationOptions locations);
 }
