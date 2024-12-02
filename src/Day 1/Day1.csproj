@@ -17,6 +17,6 @@
 		</AssemblyAttribute>
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\..\Shared\src\FileParse\FileParse.csproj" />
+	  <ProjectReference Include="..\FileParse\FileParse.csproj" />
 	</ItemGroup>
 </Project>

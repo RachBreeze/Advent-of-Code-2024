@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Shared\src\FileParse\FileParse.csproj" />
-    <ProjectReference Include="..\src\Day1.csproj" />
+    <ProjectReference Include="..\..\src\Day 2\Day2.csproj" />
+    <ProjectReference Include="..\..\src\FileParse\FileParse.csproj" />
   </ItemGroup>
 
   <ItemGroup>
