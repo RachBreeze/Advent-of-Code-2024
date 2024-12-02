@@ -22,6 +22,6 @@ internal class ConsoleApplication
 
         var similarityScore = _processLocations.TotalSimilarityScore(locations);
 
-        Console.WriteLine("Similarity Score: " + similarityScore);
+        Console.WriteLine("Similarity Score: " + similarityScore); //26674158
     }
 }

@@ -1,32 +1,34 @@
 ﻿using Day1.Model;
+using FileParse;
+using FileParse.Model;
 
 namespace Day1;
 
 internal class ReadLocations : IReadLocations
 {
+    private readonly IReadCollectionsFromFile _readCollectionsFromFile;
+    public ReadLocations(IReadCollectionsFromFile readCollectionsFromFile)
+    {
+        _readCollectionsFromFile = readCollectionsFromFile;
+    }
+
     public LocationOptions ReadLocationsFromFile(string fileName)
     {
-        if (string.IsNullOrEmpty(fileName))
+        var rows = _readCollectionsFromFile.ReadFileContentsToCollection(fileName, Constants.LOCATION_SEPERATION);
+
+        if (rows == null)
         {
-            throw new ArgumentException("File name cannot be null or empty", nameof(fileName));
+            throw new InvalidOperationException("File is empty");
         }
-
-        if (!File.Exists(fileName))
-        {
-            throw new FileNotFoundException("File not found", fileName);
-        }
-
-        var lines = File.ReadAllLines(fileName);
-
-        if (lines.Length == 0)
+        if (rows.Count == 0)
         {
             throw new InvalidOperationException("File is empty");
         }
 
         var locations = new LocationOptions();
-        foreach (var line in lines)
+        foreach (var row in rows)
         {
-            var location = ParseLine(line);
+            var location = ParseLine(row);
             if (location != null)
             {
                 locations.Add(location);
@@ -36,27 +38,32 @@ internal class ReadLocations : IReadLocations
         return locations;
     }
 
-    public LocationOption ParseLine(string line)
+    public LocationOption ParseLine(Row row)
     {
-        if (string.IsNullOrEmpty(line))
+        if (row == null)
         {
-            throw new ArgumentException("Location cannot be null or empty", nameof(line));
+            throw new ArgumentException("Row cannot be null", nameof(row));
         }
-        if (!line.Contains(Constants.LOCATION_SEPERATION))
-        {
-            throw new ArgumentException("Location is not in the correct format", nameof(line));
-        }
-        var entries = line.Split(Constants.LOCATION_SEPERATION);
 
-        if (entries.Count() != 2)
+        if (row.Values.Count != 2)
         {
-            throw new ArgumentException("Location is not in the correct format", nameof(line));
+            throw new ArgumentException("Row is not in the correct format", nameof(row));
+        }
+
+        if (!int.TryParse(row.Values[0], out var column1))
+        {
+            throw new ArgumentException("Column 1 is not an integer", nameof(row));
+        }
+
+        if (!int.TryParse(row.Values[1], out var column2))
+        {
+            throw new ArgumentException("Column 2 is not an integer", nameof(row));
         }
 
         return new LocationOption
         {
-            Column1 = int.Parse(entries[0]),
-            Column2 = int.Parse(entries[1])
+            Column1 = column1,
+            Column2 = column2
         };
     }
 

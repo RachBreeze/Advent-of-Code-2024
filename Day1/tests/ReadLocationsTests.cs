@@ -1,97 +1,92 @@
+using FileParse;
+using FileParse.Model;
+using Moq;
+using System.Collections.Specialized;
+
 namespace Day1.Tests
 {
     [TestFixture]
     public class ReadLocationsTests
     {
+        private Mock<IReadCollectionsFromFile> _mockReadCollectionsFromFile;
+        private ReadLocations _readLocations;
 
-        [Test]
-        public void ReadLocationsFromFile_FileNameIsNull_ThrowsArgumentException()
+        [SetUp]
+        public void SetUp()
         {
-            var readLocations = new ReadLocations();
-            Assert.Throws<ArgumentException>(() => readLocations.ReadLocationsFromFile(null));
-        }
-
-        [Test]
-        public void ReadLocationsFromFile_FileNameIsEmpty_ThrowsArgumentException()
-        {
-            var readLocations = new ReadLocations();
-            Assert.Throws<ArgumentException>(() => readLocations.ReadLocationsFromFile(string.Empty));
-        }
-
-        [Test]
-        public void ReadLocationsFromFile_FileDoesNotExist_ThrowsFileNotFoundException()
-        {
-            var readLocations = new ReadLocations();
-            Assert.Throws<FileNotFoundException>(() => readLocations.ReadLocationsFromFile("nonexistentfile.txt"));
+            _mockReadCollectionsFromFile = new Mock<IReadCollectionsFromFile>();
+            _readLocations = new ReadLocations(_mockReadCollectionsFromFile.Object);
         }
 
         [Test]
         public void ReadLocationsFromFile_FileIsEmpty_ThrowsInvalidOperationException()
         {
-            var readLocations = new ReadLocations();
-            var fileName = "emptyfile.txt";
-            File.WriteAllText(fileName, string.Empty);
+            _mockReadCollectionsFromFile.Setup(m => m.ReadFileContentsToCollection(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns((List<Row>)null);
 
-            try
+            Assert.Throws<InvalidOperationException>(() => _readLocations.ReadLocationsFromFile("test.txt"));
+        }
+
+        [Test]
+        public void ReadLocationsFromFile_FileHasNoRows_ThrowsInvalidOperationException()
+        {
+            _mockReadCollectionsFromFile.Setup(m => m.ReadFileContentsToCollection(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(new List<Row>());
+
+            Assert.Throws<InvalidOperationException>(() => _readLocations.ReadLocationsFromFile("test.txt"));
+        }
+
+        [Test]
+        public void ReadLocationsFromFile_ValidFile_ReturnsLocationOptions()
+        {
+            var rows = new List<Row>
             {
-                Assert.Throws<InvalidOperationException>(() => readLocations.ReadLocationsFromFile(fileName));
-            }
-            finally
-            {
-                File.Delete(fileName);
-            }
+                new Row { Values = new StringCollection { "1", "2" } },
+                new Row { Values = new StringCollection { "3", "4" } }
+            };
+
+            _mockReadCollectionsFromFile.Setup(m => m.ReadFileContentsToCollection(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(rows);
+
+            var result = _readLocations.ReadLocationsFromFile("test.txt");
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(2, result.Column1Options.Count());
+            Assert.AreEqual(2, result.Column2Options.Count());
         }
 
         [Test]
-        public void ReadLocationsFromFile_FileHasValidData_ReturnsLocations()
+        public void ParseLine_RowIsNull_ThrowsArgumentException()
         {
-            var readLocations = new ReadLocations();
-            var fileName = "validfile.txt";
-            File.WriteAllText(fileName, "1" + Constants.LOCATION_SEPERATION + "2\n3" + Constants.LOCATION_SEPERATION + "4");
-
-            try
-            {
-                var locations = readLocations.ReadLocationsFromFile(fileName);
-
-                Assert.IsNotNull(locations);
-                Assert.AreEqual(2, locations.Column1Options.Count());
-                Assert.AreEqual(2, locations.Column2Options.Count());
-            }
-            finally
-            {
-                File.Delete(fileName);
-            }
+            Assert.Throws<ArgumentException>(() => _readLocations.ParseLine(null));
         }
 
         [Test]
-        public void ParseLine_LineIsNull_ThrowsArgumentException()
+        public void ParseLine_RowHasIncorrectFormat_ThrowsArgumentException()
         {
-            var readLocations = new ReadLocations();
-            Assert.Throws<ArgumentException>(() => readLocations.ParseLine(null));
+            var row = new Row { Values = new StringCollection { "1" } };
+
+            Assert.Throws<ArgumentException>(() => _readLocations.ParseLine(row));
         }
 
         [Test]
-        public void ParseLine_LineIsEmpty_ThrowsArgumentException()
+        public void ParseLine_RowHasNonIntegerValues_ThrowsArgumentException()
         {
-            var readLocations = new ReadLocations();
-            Assert.Throws<ArgumentException>(() => readLocations.ParseLine(string.Empty));
+            var row = new Row { Values = new StringCollection { "a", "b" } };
+
+            Assert.Throws<ArgumentException>(() => _readLocations.ParseLine(row));
         }
 
         [Test]
-        public void ParseLine_LineIsNotInCorrectFormat_ThrowsArgumentException()
+        public void ParseLine_ValidRow_ReturnsLocationOption()
         {
-            var readLocations = new ReadLocations();
-            Assert.Throws<ArgumentException>(() => readLocations.ParseLine("1,2"));
-        }
+            var row = new Row { Values = new StringCollection { "1", "2" } };
 
-        [Test]
-        public void ParseLine_LineHasValidData_ReturnsLocation()
-        {
-            var readLocations = new ReadLocations();
-            var location = readLocations.ParseLine("1" + Constants.LOCATION_SEPERATION + "2");
+            var result = _readLocations.ParseLine(row);
 
-            Assert.AreEqual(1, location.Column1);
-            Assert.AreEqual(2, location.Column2);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Column1);
+            Assert.AreEqual(2, result.Column2);
         }
     }
 }
