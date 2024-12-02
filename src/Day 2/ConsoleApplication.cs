@@ -19,7 +19,9 @@ internal class ConsoleApplication
 
 
         var safeReports = _reactor.CountSafeReactors(reports);
-
         Console.WriteLine("Safe Reports Found: " + safeReports);
+
+        var safeWithDampner = _reactor.CountSafeReactorsUsingProblemDampner(reports);
+        Console.WriteLine("Safe Reports With Dampner: " + safeWithDampner);
     }
 }

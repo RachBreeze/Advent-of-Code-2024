@@ -20,7 +20,7 @@ internal class Reactor : IReactor
 
         foreach (var report in reports)
         {
-            if (ReportIsSafe(report))
+            if (ReportIsSafe(report.Levels))
             {
                 count++;
             }
@@ -28,28 +28,70 @@ internal class Reactor : IReactor
 
         return count;
     }
-    public bool ReportIsSafe(Report report)
+    public int CountSafeReactorsUsingProblemDampner(IEnumerable<Report> reports)
     {
-        if (report == null)
+        if (reports == null)
         {
-            throw new ArgumentNullException(nameof(report));
-        }
-        if (report.Levels == null)
-        {
-            throw new ArgumentException("Report levels cannot be null", nameof(report));
-        }
-        if (report.Levels.Count == 0)
-        {
-            throw new ArgumentException("Report levels cannot be empty", nameof(report));
+            throw new ArgumentNullException(nameof(reports));
         }
 
-        int currentValue = report.Levels[0];
+        if (!reports.Any())
+        {
+            return 0;
+        }
+
+        var count = 0;
+
+        foreach (var report in reports)
+        {
+            if (ReportIsSafeUsingDampner(report.Levels))
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public bool ReportIsSafeUsingDampner(List<int> levels)
+    {
+        int itemToRemove = -1;
+
+        if (ReportIsSafe(levels))
+        {
+            return true;
+        }
+
+        while (itemToRemove < levels.Count - 1)
+        {
+            itemToRemove++;
+            var newLevels = new List<int>(levels);
+            newLevels.RemoveAt(itemToRemove);
+            if (ReportIsSafe(newLevels))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    public bool ReportIsSafe(List<int> levels)
+    {
+        if (levels == null)
+        {
+            throw new ArgumentNullException(nameof(levels));
+        }
+
+        if (levels.Count == 0)
+        {
+            throw new ArgumentException("Report levels cannot be empty", nameof(levels));
+        }
+
+        int currentValue = levels[0];
         var increasing = false;
         var descreasing = false;
 
-        for (int i = 1; i < report.Levels.Count; i++)
+        for (int i = 1; i < levels.Count; i++)
         {
-            int nextValue = report.Levels[i];
+            int nextValue = levels[i];
 
             if (nextValue == currentValue)
             {
