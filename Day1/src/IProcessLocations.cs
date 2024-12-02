@@ -2,7 +2,7 @@
 
 namespace Day1;
 
-public interface IProcessLocations
+internal interface IProcessLocations
 {
     int TotalDistance(LocationOptions locations);
     int TotalSimilarityScore(LocationOptions locations);

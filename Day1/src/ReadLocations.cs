@@ -2,7 +2,7 @@
 
 namespace Day1;
 
-public class ReadLocations : IReadLocations
+internal class ReadLocations : IReadLocations
 {
     public LocationOptions ReadLocationsFromFile(string fileName)
     {

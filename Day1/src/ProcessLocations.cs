@@ -1,10 +1,10 @@
 ﻿using Day1.Model;
 
 namespace Day1;
-public class ProcessLocations : IProcessLocations
+internal class ProcessLocations : IProcessLocations
 {
 
-    public Stack<int> GetColumn1OptionsOrderd(LocationOptions locations)
+    private Stack<int> GetColumn1OptionsOrderd(LocationOptions locations)
     {
         return GetStack(locations.Column1Options);
     }
@@ -14,7 +14,7 @@ public class ProcessLocations : IProcessLocations
         return new Stack<int>(cols.OrderDescending());
     }
 
-    public Stack<int> GetColumn2OptionsOrdered(LocationOptions locations)
+    private Stack<int> GetColumn2OptionsOrdered(LocationOptions locations)
     {
         return GetStack(locations.Column2Options);
     }
