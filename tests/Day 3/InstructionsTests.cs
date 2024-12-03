@@ -21,15 +21,7 @@ public class InstructionsTests
     }
 
     [Test]
-    public void TotalMultiplications_NoInstructionsFound_ThrowsInvalidOperationException()
-    {
-        var instructions = new Instructions();
-        var memory = new StringCollection { "invalid data" };
-        Assert.Throws<InvalidOperationException>(() => instructions.TotalMultiplications(memory));
-    }
-
-    [Test]
-    public void TotalMultiplications_ValidInstructions_ReturnsCorrectTotal()
+    public void TotalMultiplications_ValidMemory_ReturnsCorrectTotal()
     {
         var instructions = new Instructions();
         var memory = new StringCollection { "mul(2,3)", "mul(4,5)" };
@@ -38,47 +30,39 @@ public class InstructionsTests
     }
 
     [Test]
-    public void ReadInstructions_ValidMemory_ReturnsCorrectInstructions()
+    public void LineTotal_LineIsNullOrEmpty_ThrowsArgumentException()
     {
         var instructions = new Instructions();
-        var memory = new StringCollection { "mul(2,3)", "mul(4,5)" };
-        var result = instructions.ReadInstructions(memory);
-        Assert.AreEqual(2, result.Count());
-        Assert.IsTrue(result.Any(i => i.Key == 2 && i.Value == 3));
-        Assert.IsTrue(result.Any(i => i.Key == 4 && i.Value == 5));
+        Assert.Throws<ArgumentException>(() => instructions.LineTotal(null));
+        Assert.Throws<ArgumentException>(() => instructions.LineTotal(string.Empty));
     }
 
     [Test]
-    public void ReadInstructionsForLine_ValidLine_ReturnsCorrectInstructions()
+    public void LineTotal_ValidLine_ReturnsCorrectTotal()
     {
         var instructions = new Instructions();
-        var line = "mul(2,3)mul(4,5)";
-        var result = instructions.ReadInstructionsForLine(line);
-        Assert.AreEqual(2, result.Count());
-        Assert.IsTrue(result.Any(i => i.Key == 2 && i.Value == 3));
-        Assert.IsTrue(result.Any(i => i.Key == 4 && i.Value == 5));
+        var result = instructions.LineTotal("mul(2,3) mul(4,5)");
+        Assert.AreEqual(26, result);
     }
 
     [Test]
-    public void ReadInstruction_ValidInstruction_ReturnsCorrectInstruction()
+    public void PatternTotal_InstructionIsNullOrEmpty_ReturnsZero()
     {
         var instructions = new Instructions();
-        var instruction = "2,3)";
-        var result = instructions.ReadInstruction(instruction);
-        Assert.IsNotNull(result);
-        Assert.AreEqual(2, result.Key);
-        Assert.AreEqual(3, result.Value);
+        var result = instructions.PatternTotal(null);
+        Assert.AreEqual(0, result);
+
+        result = instructions.PatternTotal(string.Empty);
+        Assert.AreEqual(0, result);
     }
 
     [Test]
-    public void ReadInstruction_InvalidInstruction_ReturnsNull()
+    public void PatternTotal_ValidInstruction_ReturnsCorrectTotal()
     {
         var instructions = new Instructions();
-        var instruction = "invalid";
-        var result = instructions.ReadInstruction(instruction);
-        Assert.IsNull(result);
+        var result = instructions.PatternTotal("mul(2,3)");
+        Assert.AreEqual(6, result);
     }
-
     [Test]
     // sample from https://adventofcode.com/2024/day/3
     public void ReadInstruction_TotalMultipications_Sample()

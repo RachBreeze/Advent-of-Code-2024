@@ -17,6 +17,6 @@ internal class ConsoleApplication
         Console.WriteLine("Entries Found: " + memoryEntries.Count);
 
         var total = _instructions.TotalMultiplications(memoryEntries);
-        Console.WriteLine("Total Multiplications: " + total);
+        Console.WriteLine("Total Multiplications: " + total); //168539636 
     }
 }

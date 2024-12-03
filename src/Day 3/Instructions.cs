@@ -1,5 +1,5 @@
-﻿using Day3.Model;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
+using System.Text.RegularExpressions;
 
 namespace Day3;
 
@@ -17,89 +17,53 @@ internal class Instructions : IInstructions
             throw new ArgumentException("Memory is empty", nameof(memory));
         }
 
-        var instructions = ReadInstructions(memory);
-
-        if (!instructions.Any())
-        {
-            throw new InvalidOperationException("No instructions found");
-        }
 
         var total = 0;
 
-        foreach (var instruction in instructions)
+        foreach (var line in memory)
         {
-            total += instruction.Key * instruction.Value;
+            total += LineTotal(line);
         }
         return total;
     }
-    public IEnumerable<MulInstruction> ReadInstructions(StringCollection memory)
-    {
-        var returnValues = new List<MulInstruction>();
-
-        foreach (var line in memory)
-        {
-            var instructions = ReadInstructionsForLine(line);
-            if (instructions != null)
-            {
-                returnValues = returnValues.Union(instructions).ToList<MulInstruction>();
-            }
-        }
-
-        return returnValues;
-    }
-    public IEnumerable<MulInstruction> ReadInstructionsForLine(string line)
+    public int LineTotal(string line)
     {
         if (string.IsNullOrEmpty(line))
         {
             throw new ArgumentException("Line cannot be null or empty", nameof(line));
         }
-        var returnValues = new List<MulInstruction>();
-        var availabileInstructions = line.Split("mul(");
-        foreach (var availabileInstruction in availabileInstructions)
+        List<string> patterns = Regex.Matches(line, @"mul\(\d+,\d+\)").Select(match => match.Value).ToList();
+        int total = 0;
+
+        foreach (var pattern in patterns)
         {
-            var instruction = ReadInstruction(availabileInstruction);
-            if (instruction != null)
-            {
-                returnValues.Add(instruction);
-            }
+            total += PatternTotal(pattern);
         }
 
-        return returnValues;
+        return total;
     }
 
-    public MulInstruction ReadInstruction(string availabileInstruction)
+    public int PatternTotal(string availabileInstruction)
     {
         if (string.IsNullOrEmpty(availabileInstruction))
         {
-            return null;
+            return 0;
         }
 
-        var posCloseBracket = availabileInstruction.IndexOf(")");
-
-        if (posCloseBracket == -1)
-        {
-            return null;
-        }
-
-        var availableValues = availabileInstruction.Substring(0, posCloseBracket);
+        var availableValues = availabileInstruction.Replace("mul(", "").Replace(")", "");
 
         var values = availableValues.Split(",");
 
-        if (values.Length != 2)
+        if (!int.TryParse(values[0], out var value1))
         {
-            return null;
+            return 0;
         }
 
-        if (!int.TryParse(values[0], out var key))
+        if (!int.TryParse(values[1], out var value2))
         {
-            return null;
+            return 0;
         }
 
-        if (!int.TryParse(values[1], out var value))
-        {
-            return null;
-        }
-
-        return new MulInstruction { Key = key, Value = value };
+        return value1 * value2;
     }
 }
