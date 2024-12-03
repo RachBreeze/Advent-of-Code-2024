@@ -1,38 +1,16 @@
-﻿using System.Collections.Specialized;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace Day3;
 
 internal class Instructions : IInstructions
 {
-    public int TotalMultiplications(StringCollection memory)
+    public int TotalMultiplications(string memory)
     {
-        if (memory == null)
+        if (string.IsNullOrEmpty(memory))
         {
             throw new ArgumentNullException(nameof(memory));
         }
-
-        if (memory.Count == 0)
-        {
-            throw new ArgumentException("Memory is empty", nameof(memory));
-        }
-
-
-        var total = 0;
-
-        foreach (var line in memory)
-        {
-            total += LineTotal(line);
-        }
-        return total;
-    }
-    public int LineTotal(string line)
-    {
-        if (string.IsNullOrEmpty(line))
-        {
-            throw new ArgumentException("Line cannot be null or empty", nameof(line));
-        }
-        List<string> patterns = Regex.Matches(line, @"mul\(\d+,\d+\)").Select(match => match.Value).ToList();
+        List<string> patterns = Regex.Matches(memory, @"mul\(\d+,\d+\)").Select(match => match.Value).ToList();
         int total = 0;
 
         foreach (var pattern in patterns)
@@ -41,6 +19,20 @@ internal class Instructions : IInstructions
         }
 
         return total;
+
+    }
+
+    public int TotalWithConditionalStatements(string memory)
+    {
+        if (memory == null)
+        {
+            throw new ArgumentNullException(nameof(memory));
+        }
+
+
+        var validEntries = GetValidEntries(memory);
+        return TotalMultiplications(validEntries);
+
     }
 
     public int PatternTotal(string availabileInstruction)
@@ -65,5 +57,18 @@ internal class Instructions : IInstructions
         }
 
         return value1 * value2;
+    }
+    public string GetValidEntries(string line)
+    {
+        var doos = line.Split("do()");
+        var returnString = "";
+
+        foreach (var doo in doos)
+        {
+            var donts = doo.Split("don't()");
+            returnString += donts[0];
+        }
+
+        return returnString;
     }
 }

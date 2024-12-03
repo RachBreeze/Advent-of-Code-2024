@@ -13,10 +13,14 @@ internal class ConsoleApplication
     }
     public void Run()
     {
-        var memoryEntries = _readFileContents.AsLines("C:\\GitHub\\Advent-Of-Code-2024\\data\\inputDay3.txt");
-        Console.WriteLine("Entries Found: " + memoryEntries.Count);
+        var input = File.ReadAllText("C:\\GitHub\\Advent-Of-Code-2024\\data\\inputDay3.txt");
 
-        var total = _instructions.TotalMultiplications(memoryEntries);
+        var total = _instructions.TotalMultiplications(input);
         Console.WriteLine("Total Multiplications: " + total); //168539636 
+
+        var newTotal = _instructions.TotalWithConditionalStatements(input);
+        Console.WriteLine("Total Total With Conditional: " + newTotal); //97529391
+
+        //not 102631226
     }
 }
