@@ -2,7 +2,7 @@
 
 namespace Day3;
 
-internal class ConsoleApplication
+internal sealed class ConsoleApplication
 {
     private readonly IReadFileContents _readFileContents;
     private readonly IParser _instructions;

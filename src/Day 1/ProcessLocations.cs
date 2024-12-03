@@ -1,7 +1,7 @@
 ﻿using Day1.Model;
 
 namespace Day1;
-internal class ProcessLocations : IProcessLocations
+internal sealed class ProcessLocations : IProcessLocations
 {
 
     private Stack<int> GetColumn1OptionsOrderd(LocationOptions locations)

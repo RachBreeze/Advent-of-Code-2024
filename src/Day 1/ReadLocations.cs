@@ -4,7 +4,7 @@ using FileParse.Model;
 
 namespace Day1;
 
-internal class ReadLocations : IReadLocations
+internal sealed class ReadLocations : IReadLocations
 {
     private readonly IReadFileContents _readCollectionsFromFile;
     public ReadLocations(IReadFileContents readCollectionsFromFile)

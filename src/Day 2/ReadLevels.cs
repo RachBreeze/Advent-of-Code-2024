@@ -4,7 +4,7 @@ using FileParse.Model;
 
 namespace Day2;
 
-internal class ReadLevels : IReadLevels
+internal sealed class ReadLevels : IReadLevels
 {
     private readonly IReadFileContents _readCollectionsFromFile;
 

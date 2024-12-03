@@ -52,7 +52,7 @@ internal class Reactor : IReactor
         return count;
     }
 
-    public bool ReportIsSafeUsingDampner(List<int> levels)
+    internal protected bool ReportIsSafeUsingDampner(List<int> levels)
     {
         int itemToRemove = -1;
 
@@ -73,7 +73,7 @@ internal class Reactor : IReactor
         }
         return false;
     }
-    public bool ReportIsSafe(List<int> levels)
+    internal protected bool ReportIsSafe(List<int> levels)
     {
         if (levels == null)
         {

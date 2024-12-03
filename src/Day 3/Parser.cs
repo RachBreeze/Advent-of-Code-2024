@@ -2,7 +2,7 @@
 
 namespace Day3;
 
-internal class Parser : IParser
+internal sealed class Parser : IParser
 {
     public int Part1(string memory)
     {
@@ -35,7 +35,7 @@ internal class Parser : IParser
 
     }
 
-    public int PatternTotal(string availabileInstruction)
+    internal protected int PatternTotal(string availabileInstruction)
     {
         if (string.IsNullOrEmpty(availabileInstruction))
         {

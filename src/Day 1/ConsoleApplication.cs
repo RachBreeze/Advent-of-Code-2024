@@ -1,6 +1,6 @@
 ﻿namespace Day1;
 
-internal class ConsoleApplication
+internal sealed class ConsoleApplication
 {
     private readonly IReadLocations _readLocations;
     private readonly IProcessLocations _processLocations;

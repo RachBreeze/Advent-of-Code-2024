@@ -15,6 +15,8 @@ internal class ConsoleApplication
         var reports = _readLevels.ReadReportsFromFile("C:\\GitHub\\Advent-Of-Code-2024\\data\\inputDay2.txt");
         Console.WriteLine("Reports Found: " + reports.Count());
 
+        var reactor = new Reactor();
+        reactor.ReportIsSafe(null);
 
         var safeReports = _reactor.Part1(reports);
         Console.WriteLine("Safe Reports Found: " + safeReports); //402
