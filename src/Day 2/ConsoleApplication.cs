@@ -16,10 +16,10 @@ internal class ConsoleApplication
         Console.WriteLine("Reports Found: " + reports.Count());
 
 
-        var safeReports = _reactor.CountSafeReactors(reports);
+        var safeReports = _reactor.Part1(reports);
         Console.WriteLine("Safe Reports Found: " + safeReports); //402
 
-        var safeWithDampner = _reactor.CountSafeReactorsUsingProblemDampner(reports);
+        var safeWithDampner = _reactor.Part2(reports);
         Console.WriteLine("Safe Reports With Dampner: " + safeWithDampner); //455
     }
 }

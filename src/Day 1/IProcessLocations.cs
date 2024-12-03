@@ -4,6 +4,6 @@ namespace Day1;
 
 internal interface IProcessLocations
 {
-    int TotalDistance(LocationOptions locations);
-    int TotalSimilarityScore(LocationOptions locations);
+    int Part1(LocationOptions locations);
+    int Part2(LocationOptions locations);
 }

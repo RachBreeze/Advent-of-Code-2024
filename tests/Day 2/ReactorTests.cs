@@ -10,14 +10,14 @@ public class ReactorTests
     public void CountSafeReactors_NullReports_ThrowsArgumentNullException()
     {
         var reactor = new Reactor();
-        Assert.Throws<ArgumentNullException>(() => reactor.CountSafeReactors(null));
+        Assert.Throws<ArgumentNullException>(() => reactor.Part1(null));
     }
 
     [Test]
     public void CountSafeReactors_EmptyReports_ReturnsZero()
     {
         var reactor = new Reactor();
-        var result = reactor.CountSafeReactors(new List<Report>());
+        var result = reactor.Part1(new List<Report>());
         Assert.AreEqual(0, result);
     }
 
@@ -30,7 +30,7 @@ public class ReactorTests
             new Report { Levels = new List<int> { 1, 2, 3 } },
             new Report { Levels = new List<int> { 3, 2, 1 } }
         };
-        var result = reactor.CountSafeReactors(reports);
+        var result = reactor.Part1(reports);
         Assert.AreEqual(2, result);
     }
 
@@ -44,7 +44,7 @@ public class ReactorTests
             new Report { Levels = new List<int> { 3, 2, 1 } },
             new Report { Levels = new List<int> { 1, 1, 1 } }
         };
-        var result = reactor.CountSafeReactors(reports);
+        var result = reactor.Part1(reports);
         Assert.AreEqual(2, result);
     }
 

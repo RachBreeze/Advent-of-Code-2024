@@ -17,7 +17,7 @@ internal class Program
     {
         var services = new ServiceCollection();
         services.AddTransient<IReadFileContents, ReadFileContents>();
-        services.AddTransient<IInstructions, Instructions>();
+        services.AddTransient<IParser, Parser>();
         services.AddSingleton<ConsoleApplication>();
         _serviceProvider = services.BuildServiceProvider(true);
     }

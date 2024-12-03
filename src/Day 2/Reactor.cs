@@ -4,7 +4,7 @@ namespace Day2;
 
 internal class Reactor : IReactor
 {
-    public int CountSafeReactors(IEnumerable<Report> reports)
+    public int Part1(IEnumerable<Report> reports)
     {
         if (reports == null)
         {
@@ -28,7 +28,7 @@ internal class Reactor : IReactor
 
         return count;
     }
-    public int CountSafeReactorsUsingProblemDampner(IEnumerable<Report> reports)
+    public int Part2(IEnumerable<Report> reports)
     {
         if (reports == null)
         {

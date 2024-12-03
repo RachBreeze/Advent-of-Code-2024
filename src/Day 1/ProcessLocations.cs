@@ -18,7 +18,7 @@ internal class ProcessLocations : IProcessLocations
     {
         return GetStack(locations.Column2Options);
     }
-    public int TotalDistance(LocationOptions locations)
+    public int Part1(LocationOptions locations)
     {
         if (locations == null)
         {
@@ -43,7 +43,7 @@ internal class ProcessLocations : IProcessLocations
         return distance;
     }
 
-    public int TotalSimilarityScore(LocationOptions locations)
+    public int Part2(LocationOptions locations)
     {
         if (locations == null)
         {

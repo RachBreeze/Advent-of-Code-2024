@@ -2,9 +2,9 @@
 
 namespace Day3;
 
-internal class Instructions : IInstructions
+internal class Parser : IParser
 {
-    public int TotalMultiplications(string memory)
+    public int Part1(string memory)
     {
         if (string.IsNullOrEmpty(memory))
         {
@@ -22,7 +22,7 @@ internal class Instructions : IInstructions
 
     }
 
-    public int TotalWithConditionalStatements(string memory)
+    public int Part2(string memory)
     {
         if (memory == null)
         {
@@ -31,7 +31,7 @@ internal class Instructions : IInstructions
 
 
         var validEntries = GetValidEntries(memory);
-        return TotalMultiplications(validEntries);
+        return Part1(validEntries);
 
     }
 
