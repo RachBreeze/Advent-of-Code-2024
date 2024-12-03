@@ -6,16 +6,16 @@ namespace Day2;
 
 internal class ReadLevels : IReadLevels
 {
-    private readonly IReadCollectionsFromFile _readCollectionsFromFile;
+    private readonly IReadFileContents _readCollectionsFromFile;
 
-    public ReadLevels(IReadCollectionsFromFile readCollectionsFromFile)
+    public ReadLevels(IReadFileContents readCollectionsFromFile)
     {
         _readCollectionsFromFile = readCollectionsFromFile;
     }
 
     public IEnumerable<Report> ReadReportsFromFile(string filename)
     {
-        var rows = _readCollectionsFromFile.ReadFileContentsToCollection(filename, " ");
+        var rows = _readCollectionsFromFile.AsCollections(filename, " ");
 
         if (rows == null)
         {

@@ -8,20 +8,20 @@ namespace Day2.Tests;
 [TestFixture]
 public class ReadLevelsTests
 {
-    private Mock<IReadCollectionsFromFile> _mockReadCollectionsFromFile;
+    private Mock<IReadFileContents> _mockReadCollectionsFromFile;
     private ReadLevels _readLevels;
 
     [SetUp]
     public void SetUp()
     {
-        _mockReadCollectionsFromFile = new Mock<IReadCollectionsFromFile>();
+        _mockReadCollectionsFromFile = new Mock<IReadFileContents>();
         _readLevels = new ReadLevels(_mockReadCollectionsFromFile.Object);
     }
 
     [Test]
     public void ReadReportsFromFile_FileIsEmpty_ThrowsInvalidOperationException()
     {
-        _mockReadCollectionsFromFile.Setup(x => x.ReadFileContentsToCollection(It.IsAny<string>(), It.IsAny<string>()))
+        _mockReadCollectionsFromFile.Setup(x => x.AsCollections(It.IsAny<string>(), It.IsAny<string>()))
             .Returns((List<Row>)null);
 
         Assert.Throws<InvalidOperationException>(() => _readLevels.ReadReportsFromFile("testfile.txt"));
@@ -30,7 +30,7 @@ public class ReadLevelsTests
     [Test]
     public void ReadReportsFromFile_FileHasNoRows_ThrowsInvalidOperationException()
     {
-        _mockReadCollectionsFromFile.Setup(x => x.ReadFileContentsToCollection(It.IsAny<string>(), It.IsAny<string>()))
+        _mockReadCollectionsFromFile.Setup(x => x.AsCollections(It.IsAny<string>(), It.IsAny<string>()))
             .Returns(new List<Row>());
 
         Assert.Throws<InvalidOperationException>(() => _readLevels.ReadReportsFromFile("testfile.txt"));
@@ -45,7 +45,7 @@ public class ReadLevelsTests
             new Row { Values = new StringCollection { "4", "5", "6" } }
         };
 
-        _mockReadCollectionsFromFile.Setup(x => x.ReadFileContentsToCollection(It.IsAny<string>(), It.IsAny<string>()))
+        _mockReadCollectionsFromFile.Setup(x => x.AsCollections(It.IsAny<string>(), It.IsAny<string>()))
             .Returns(rows);
 
         var reports = _readLevels.ReadReportsFromFile("testfile.txt");

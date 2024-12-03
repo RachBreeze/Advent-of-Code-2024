@@ -1,7 +1,8 @@
-﻿using Day1;
-using FileParse;
+﻿using FileParse;
 using Microsoft.Extensions.DependencyInjection;
-public class Program
+namespace Day3;
+
+internal class Program
 {
     private static IServiceProvider _serviceProvider;
 
@@ -16,8 +17,7 @@ public class Program
     {
         var services = new ServiceCollection();
         services.AddTransient<IReadFileContents, ReadFileContents>();
-        services.AddTransient<IReadLocations, ReadLocations>();
-        services.AddTransient<IProcessLocations, ProcessLocations>();
+        services.AddTransient<IInstructions, Instructions>();
         services.AddSingleton<ConsoleApplication>();
         _serviceProvider = services.BuildServiceProvider(true);
     }

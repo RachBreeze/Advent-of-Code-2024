@@ -6,15 +6,15 @@ namespace Day1;
 
 internal class ReadLocations : IReadLocations
 {
-    private readonly IReadCollectionsFromFile _readCollectionsFromFile;
-    public ReadLocations(IReadCollectionsFromFile readCollectionsFromFile)
+    private readonly IReadFileContents _readCollectionsFromFile;
+    public ReadLocations(IReadFileContents readCollectionsFromFile)
     {
         _readCollectionsFromFile = readCollectionsFromFile;
     }
 
     public LocationOptions ReadLocationsFromFile(string fileName)
     {
-        var rows = _readCollectionsFromFile.ReadFileContentsToCollection(fileName, Constants.LOCATION_SEPERATION);
+        var rows = _readCollectionsFromFile.AsCollections(fileName, Constants.LOCATION_SEPERATION);
 
         if (rows == null)
         {

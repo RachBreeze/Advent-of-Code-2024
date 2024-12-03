@@ -8,20 +8,20 @@ namespace Day1.Tests
     [TestFixture]
     public class ReadLocationsTests
     {
-        private Mock<IReadCollectionsFromFile> _mockReadCollectionsFromFile;
+        private Mock<IReadFileContents> _mockReadCollectionsFromFile;
         private ReadLocations _readLocations;
 
         [SetUp]
         public void SetUp()
         {
-            _mockReadCollectionsFromFile = new Mock<IReadCollectionsFromFile>();
+            _mockReadCollectionsFromFile = new Mock<IReadFileContents>();
             _readLocations = new ReadLocations(_mockReadCollectionsFromFile.Object);
         }
 
         [Test]
         public void ReadLocationsFromFile_FileIsEmpty_ThrowsInvalidOperationException()
         {
-            _mockReadCollectionsFromFile.Setup(m => m.ReadFileContentsToCollection(It.IsAny<string>(), It.IsAny<string>()))
+            _mockReadCollectionsFromFile.Setup(m => m.AsCollections(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns((List<Row>)null);
 
             Assert.Throws<InvalidOperationException>(() => _readLocations.ReadLocationsFromFile("test.txt"));
@@ -30,7 +30,7 @@ namespace Day1.Tests
         [Test]
         public void ReadLocationsFromFile_FileHasNoRows_ThrowsInvalidOperationException()
         {
-            _mockReadCollectionsFromFile.Setup(m => m.ReadFileContentsToCollection(It.IsAny<string>(), It.IsAny<string>()))
+            _mockReadCollectionsFromFile.Setup(m => m.AsCollections(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(new List<Row>());
 
             Assert.Throws<InvalidOperationException>(() => _readLocations.ReadLocationsFromFile("test.txt"));
@@ -45,7 +45,7 @@ namespace Day1.Tests
                 new Row { Values = new StringCollection { "3", "4" } }
             };
 
-            _mockReadCollectionsFromFile.Setup(m => m.ReadFileContentsToCollection(It.IsAny<string>(), It.IsAny<string>()))
+            _mockReadCollectionsFromFile.Setup(m => m.AsCollections(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(rows);
 
             var result = _readLocations.ReadLocationsFromFile("test.txt");

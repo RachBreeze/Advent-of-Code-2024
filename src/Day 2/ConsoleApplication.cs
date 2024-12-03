@@ -1,6 +1,4 @@
-﻿using Day2;
-
-namespace Day1;
+﻿namespace Day2;
 
 internal class ConsoleApplication
 {

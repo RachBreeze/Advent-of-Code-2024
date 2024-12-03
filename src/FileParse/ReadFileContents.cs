@@ -3,9 +3,29 @@ using System.Collections.Specialized;
 
 namespace FileParse;
 
-public class ReadCollectionsFromFile : IReadCollectionsFromFile
+public class ReadFileContents : IReadFileContents
 {
-    public List<Row> ReadFileContentsToCollection(string fileName, string separator)
+    public List<Row> AsCollections(string fileName, string separator)
+    {
+
+        var lines = AsLines(fileName);
+        var rowNumber = 0;
+        var rows = new List<Row>();
+        foreach (var line in lines)
+        {
+            rows.Add(new Row
+            {
+                Index = rowNumber,
+                Values = ParseLine(line, separator)
+            });
+
+            rowNumber++;
+        }
+
+        return rows;
+    }
+
+    public StringCollection AsLines(string fileName)
     {
         if (string.IsNullOrEmpty(fileName))
         {
@@ -24,21 +44,16 @@ public class ReadCollectionsFromFile : IReadCollectionsFromFile
             throw new InvalidOperationException("File is empty");
         }
 
-        var rowNumber = 0;
-        var rows = new List<Row>();
+        var returnValues = new StringCollection();
+
         foreach (var line in lines)
         {
-            rows.Add(new Row
-            {
-                Index = rowNumber,
-                Values = ParseLine(line, separator)
-            });
-
-            rowNumber++;
+            returnValues.Add(line);
         }
 
-        return rows;
+        return returnValues;
     }
+
     internal StringCollection ParseLine(string line, string separator)
     {
         if (string.IsNullOrEmpty(line))
