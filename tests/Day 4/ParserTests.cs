@@ -138,7 +138,7 @@ internal class ParserTests
                 { 3, new char[] { 'm', 's', 'x', 'a', 's', 'x' } }
             };
 
-        var result = parser.CalculateTotaleXmasByColumn(grid);
+        var result = parser.CalculateTotalXmasByColumn(grid);
 
         Assert.AreEqual(2, result);
     }
@@ -148,7 +148,7 @@ internal class ParserTests
     {
         var grid = new Dictionary<int, char[]>();
         var parser = new Parser();
-        var result = parser.CalculateTotaleXmasByColumn(grid);
+        var result = parser.CalculateTotalXmasByColumn(grid);
 
         Assert.AreEqual(0, result);
     }
@@ -157,6 +157,53 @@ internal class ParserTests
     public void CalculateTotaleXmasByColumn_NullGrid_ThrowsArgumentNullException()
     {
         var parser = new Parser();
-        Assert.Throws<ArgumentNullException>(() => parser.CalculateTotaleXmasByColumn(null));
+        Assert.Throws<ArgumentNullException>(() => parser.CalculateTotalXmasByColumn(null));
+    }
+    [Test]
+    public void ConvertLeftoRightDiagonalToRows_ValidGrid_ReturnsCorrectRows()
+    {
+        // Arrange
+        var parser = new Parser();
+        var grid = new Dictionary<int, char[]>
+            {
+                { 0, new char[] { 'a', 'b', 'c', 'd','u' } },
+                { 1, new char[] { 'e', 'f', 'g', 'h', 'v' } },
+                { 2, new char[] { 'i', 'j', 'k', 'l', 'w' } },
+                { 3, new char[] { 'm', 'n', 'o', 'p', 'x' } },
+                { 4, new char[] { 'q', 'r', 's', 't', 'y' } }
+            };
+
+        // Act
+        var result = parser.ConvertLeftoRightDiagonalToRows(grid);
+
+        // Assert
+        Assert.That(result, Has.Member("afkpy"));
+        Assert.That(result, Has.Member("bglx"));
+        Assert.That(result, Has.Member("ejot"));
+        Assert.That(result, Has.No.Member("fkpy"));
+    }
+
+    [Test]
+    public void ConvertLeftoRightDiagonalToRows_EmptyGrid_ReturnsEmptyStringCollection()
+    {
+        // Arrange
+        var parser = new Parser();
+        var grid = new Dictionary<int, char[]>();
+
+        // Act
+        var result = parser.ConvertLeftoRightDiagonalToRows(grid);
+
+        // Assert
+        Assert.IsEmpty(result);
+    }
+
+    [Test]
+    public void ConvertLeftoRightDiagonalToRows_NullGrid_ThrowsArgumentNullException()
+    {
+        // Arrange
+        var parser = new Parser();
+
+        // Act & Assert
+        Assert.Throws<ArgumentNullException>(() => parser.ConvertLeftoRightDiagonalToRows(null));
     }
 }
