@@ -156,4 +156,110 @@ internal sealed class Parser : IParser
         Array.Reverse(charArray);
         return new string(charArray);
     }
+
+    public int Part2(StringCollection wordSearch)
+    {
+        if (wordSearch == null)
+        {
+            throw new ArgumentNullException(nameof(wordSearch));
+        }
+
+        var grid = ConvertoGrid(wordSearch);
+        var totalRows = grid.Count - 1;
+        var total = 0;
+        for (int rowIndex = 1; rowIndex < totalRows; rowIndex++)
+        {
+            total += CountXMasInGrid(grid, rowIndex);
+        }
+
+        return total;
+    }
+
+    internal int CountXMasInGrid(Dictionary<int, char[]> grid, int rowIndex)
+    {
+        if (grid == null)
+        {
+            throw new ArgumentException(nameof(grid));
+        }
+
+        if (rowIndex < 0 || rowIndex > grid.Count - 2)
+        {
+            throw new ArgumentOutOfRangeException(nameof(rowIndex));
+        }
+
+        var row = grid[rowIndex];
+        var colIndex = 0;
+        var rowLength = row.Length;
+        var total = 0;
+
+        while (colIndex < rowLength)
+        {
+            var aIndex = Array.FindIndex(row, colIndex, c => c == 'A');
+            if (aIndex == -1)
+            {
+                colIndex = rowLength;
+                break;
+            }
+
+            if (IsValidXmas(grid, rowIndex, aIndex))
+            {
+                total++;
+            }
+            colIndex = aIndex + 1;
+        }
+
+        return total;
+    }
+    internal protected bool IsValidXmas(Dictionary<int, char[]> grid, int rowIndex, int aIndex)
+    {
+        if (grid == null)
+        {
+            throw new ArgumentException(nameof(grid));
+        }
+
+        if (rowIndex >= grid.Count)
+        {
+            throw new ArgumentOutOfRangeException(nameof(rowIndex));
+        }
+        if (aIndex == 0)
+        {
+            return false;
+        }
+        var previousRow = grid[rowIndex - 1];
+        var nextRow = grid[rowIndex + 1];
+
+        if (aIndex + 1 >= previousRow.Length || aIndex + 1 >= nextRow.Length)
+        {
+            return false;
+        }
+
+        var topLeftChar = previousRow[aIndex - 1];
+        var topRightChar = previousRow[aIndex + 1];
+        var bottomLeftChar = nextRow[aIndex - 1];
+        var bottomRightChar = nextRow[aIndex + 1];
+
+        if (!IsValidXmasValues(topLeftChar, bottomRightChar))
+        {
+            return false;
+        }
+        if (!IsValidXmasValues(topRightChar, bottomLeftChar))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    private bool IsValidXmasValues(char char1, char char2)
+    {
+        if (char1 != 'M' && char1 != 'S')
+        {
+            return false;
+        }
+        if (char2 != 'M' && char2 != 'S')
+        {
+            return false;
+        }
+
+        return char1 != char2;
+    }
 }

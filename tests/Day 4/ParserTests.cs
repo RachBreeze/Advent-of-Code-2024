@@ -206,4 +206,105 @@ internal class ParserTests
         // Act & Assert
         Assert.Throws<ArgumentNullException>(() => parser.ConvertLeftoRightDiagonalToRows(null));
     }
+
+    [Test]
+    public void IsValidXmas_ValidXmas_ReturnsTrue()
+    {
+        var parser = new Parser();
+        var grid = new Dictionary<int, char[]>
+            {
+                { 0, new char[] { 'M', 'S', 'S' } },
+                { 1, new char[] { 'S', 'A', 'S' } },
+                { 2, new char[] { 'M', 'S', 'S' } }
+            };
+
+
+        var result = parser.IsValidXmas(grid, 1, 1);
+
+        Assert.IsTrue(result);
+    }
+
+    [Test]
+    public void IsValidXmas_InvalidXmas_ReturnsFalse()
+    {
+        var parser = new Parser();
+        var grid = new Dictionary<int, char[]>
+            {
+                { 0, new char[] { 'M', 'S', 'M' } },
+                { 1, new char[] { 'S', 'A', 'S' } },
+                { 2, new char[] { 'M', 'X', 'M' } }
+            };
+
+        var result = parser.IsValidXmas(grid, 1, 1);
+
+        Assert.IsFalse(result);
+    }
+
+    [Test]
+    public void IsValidXmas_RowIndexOutOfRange_ThrowsArgumentOutOfRangeException()
+    {
+        var parser = new Parser();
+        var grid = new Dictionary<int, char[]>
+            {
+                { 0, new char[] { 'M', 'S', 'M' } },
+                { 1, new char[] { 'S', 'A', 'S' } },
+                { 2, new char[] { 'M', 'S', 'M' } }
+            };
+
+        Assert.Throws<ArgumentOutOfRangeException>(() => parser.IsValidXmas(grid, 0, 1));
+    }
+
+    [Test]
+    public void IsValidXmas_GridIsNull_ThrowsArgumentException()
+    {
+        var parser = new Parser();
+        Assert.Throws<ArgumentException>(() => parser.IsValidXmas(null, 1, 1));
+    }
+
+    [Test]
+    public void CountXMasInGrid_ValidGrid_ReturnsCorrectCount()
+    {
+        var parser = new Parser();
+        var grid = new Dictionary<int, char[]>
+            {
+                { 0, new char[] { 'M', 'A', 'S' } },
+                { 1, new char[] { 'A', 'A', 'A' } },
+                { 2, new char[] { 'M', 'A', 'S' } }
+            };
+
+        var result = parser.CountXMasInGrid(grid, 1);
+
+        Assert.AreEqual(1, result);
+    }
+
+    [Test]
+    public void CountXMasInGrid_EmptyGrid_ReturnsZero()
+    {
+        var parser = new Parser();
+        var grid = new Dictionary<int, char[]>();
+        Assert.Throws<ArgumentOutOfRangeException>(() => parser.CountXMasInGrid(grid, 1));
+
+    }
+
+    [Test]
+    public void CountXMasInGrid_InvalidRowIndex_ThrowsArgumentOutOfRangeException()
+    {
+        var parser = new Parser();
+        var grid = new Dictionary<int, char[]>
+            {
+                { 0, new char[] { 'M', 'A', 'S' } },
+                { 1, new char[] { 'A', 'X', 'A' } },
+                { 2, new char[] { 'S', 'A', 'M' } }
+            };
+
+        Assert.Throws<ArgumentOutOfRangeException>(() => parser.CountXMasInGrid(grid, -1));
+        Assert.Throws<ArgumentOutOfRangeException>(() => parser.CountXMasInGrid(grid, 3));
+    }
+
+    [Test]
+    public void CountXMasInGrid_NullGrid_ThrowsArgumentException()
+    {
+        var parser = new Parser();
+        Assert.Throws<ArgumentException>(() => parser.CountXMasInGrid(null, 1));
+    }
 }
