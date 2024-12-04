@@ -1,5 +1,4 @@
-﻿using FileParse;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 namespace Day3;
 
 internal class Program
@@ -16,7 +15,6 @@ internal class Program
     private static void RegisterServices()
     {
         var services = new ServiceCollection();
-        services.AddTransient<IReadFileContents, ReadFileContents>();
         services.AddTransient<IParser, Parser>();
         services.AddSingleton<ConsoleApplication>();
         _serviceProvider = services.BuildServiceProvider(true);
