@@ -17,8 +17,20 @@ internal sealed class Parser : IParser
         var total = CalculateTotalXmasByLine(wordSearch);
         total += CalculateTotalXmasByColumn(grid);
         total += CalculateTotalXmasByLeftToRightDiagonal(grid);
+        total += CalculateTotalXmasByRightToLeftDiagonal(grid);
         return total;
 
+    }
+
+    internal protected int CalculateTotalXmasByRightToLeftDiagonal(Dictionary<int, char[]> grid)
+    {
+        var newGrid = new Dictionary<int, char[]>();
+        foreach (var item in grid)
+        {
+            newGrid.Add(item.Key, item.Value.Reverse().ToArray());
+        }
+
+        return CalculateTotalXmasByLeftToRightDiagonal(newGrid);
     }
 
     internal protected int CalculateTotalXmasByLeftToRightDiagonal(Dictionary<int, char[]> grid)
