@@ -30,6 +30,80 @@ internal sealed class Parser : IParser
 
     }
 
+    public int Part2(StringCollection input)
+    {
+        if (input == null)
+        {
+            throw new ArgumentNullException(nameof(input));
+        }
+        if (input.Count == 0)
+        {
+            return 0;
+        }
+
+        var pageOrdering = ReadPageOrdering(input);
+        var pages = ReadManuals(input);
+
+        var total = 0;
+        foreach (var page in pages)
+        {
+            if (!IsValidManual(page, pageOrdering))
+            {
+                var pagesCorrectlyOrdered = OrderManualCorrectly(page, pageOrdering);
+                total += GetMiddlePage(pagesCorrectlyOrdered);
+            }
+        }
+        return total;
+    }
+
+    internal protected Manual OrderManualCorrectly(Manual page, IEnumerable<PageOrderPairs> pageOrdering)
+    {
+        if (page == null)
+        {
+            throw new ArgumentNullException(nameof(page));
+        }
+
+        if (pageOrdering == null)
+        {
+            throw new ArgumentNullException(nameof(pageOrdering));
+        }
+
+        var pageCount = page.Pages.Count();
+        var previousPages = new List<int>();
+
+        for (int i = 0; i < pageCount; i++)
+        {
+            var currentPage = page.Pages.ElementAt(i);
+            var pageOrder = pageOrdering.Where(x => x.PageNumber1 == currentPage);
+            var canAddNumber = true;
+            foreach (var order in pageOrder)
+            {
+                var pageNumber2Location = previousPages.IndexOf(order.PageNumber2);
+                if (pageNumber2Location > -1)
+                {
+                    previousPages[pageNumber2Location] = currentPage;
+                    previousPages.Add(order.PageNumber2);
+                    canAddNumber = false;
+                    break;
+                }
+            }
+            if (canAddNumber)
+            {
+                previousPages.Add(currentPage);
+            }
+        }
+
+        var manual = new Manual(previousPages);
+
+
+        if (IsValidManual(manual, pageOrdering))
+        {
+            return manual;
+        }
+        return OrderManualCorrectly(manual, pageOrdering);
+    }
+
+
     internal protected int GetMiddlePage(Manual page)
     {
         if (page == null)

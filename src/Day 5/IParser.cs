@@ -4,6 +4,6 @@ namespace Day5;
 
 internal interface IParser
 {
-    int Part1(StringCollection wordSearch);
-    //int Part2(StringCollection wordSearch);
+    int Part1(StringCollection input);
+    int Part2(StringCollection input);
 }

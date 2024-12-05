@@ -8,6 +8,10 @@ internal sealed class Manual
         _pages = new List<int>();
     }
 
+    public Manual(List<int> pages)
+    {
+        _pages = pages;
+    }
     public void AddPage(int page)
     {
         _pages.Add(page);

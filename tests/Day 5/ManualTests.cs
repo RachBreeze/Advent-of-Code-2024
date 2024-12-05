@@ -33,4 +33,31 @@ public class ManualTests
         // Assert
         CollectionAssert.AreEqual(pages, manual.Pages);
     }
+
+
+    [Test]
+    public void Constructor_WithPages_InitializesPages()
+    {
+        // Arrange
+        var pages = new List<int> { 1, 2, 3 };
+
+        // Act
+        var manual = new Manual(pages);
+
+        // Assert
+        CollectionAssert.AreEqual(pages, manual.Pages);
+    }
+
+    [Test]
+    public void Constructor_WithEmptyPages_InitializesEmptyPages()
+    {
+        // Arrange
+        var pages = new List<int>();
+
+        // Act
+        var manual = new Manual(pages);
+
+        // Assert
+        CollectionAssert.AreEqual(pages, manual.Pages);
+    }
 }

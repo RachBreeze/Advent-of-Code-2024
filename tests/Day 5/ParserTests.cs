@@ -282,4 +282,83 @@ public class ParserTests
         // Assert
         Assert.AreEqual(2, result);
     }
+    [Test]
+    public void OrderManualCorrectly_ValidManual_ReturnsOrderedManual()
+    {
+        // Arrange
+        var parser = new Parser();
+        var manual = new Manual(new List<int> { 3, 1, 2 });
+        var pageOrdering = new List<PageOrderPairs>
+            {
+                new PageOrderPairs { PageNumber1 = 1, PageNumber2 = 2 },
+                new PageOrderPairs { PageNumber1 = 2, PageNumber2 = 3 }
+            };
+
+        // Act
+        var result = parser.OrderManualCorrectly(manual, pageOrdering) as Manual;
+
+        // Assert
+        Assert.IsNotNull(result);
+        CollectionAssert.AreEqual(new List<int> { 1, 2, 3 }, result.Pages.ToList());
+    }
+
+    [Test]
+    public void OrderManualCorrectly_InvalidManual_ReturnsOrderedManual()
+    {
+        // Arrange
+        var parser = new Parser();
+        var manual = new Manual(new List<int> { 3, 2, 1 });
+        var pageOrdering = new List<PageOrderPairs>
+            {
+                new PageOrderPairs { PageNumber1 = 1, PageNumber2 = 2 },
+                new PageOrderPairs { PageNumber1 = 2, PageNumber2 = 3 }
+            };
+
+        // Act
+        var result = parser.OrderManualCorrectly(manual, pageOrdering) as Manual;
+
+        // Assert
+        Assert.IsNotNull(result);
+        CollectionAssert.AreEqual(new List<int> { 1, 2, 3 }, result.Pages.ToList());
+    }
+
+    [Test]
+    public void OrderManualCorrectly_EmptyManual_ReturnsEmptyManual()
+    {
+        // Arrange
+        var parser = new Parser();
+        var manual = new Manual(new List<int>());
+        var pageOrdering = new List<PageOrderPairs>();
+
+        // Act
+        var result = parser.OrderManualCorrectly(manual, pageOrdering) as Manual;
+
+        // Assert
+        Assert.IsNotNull(result);
+        CollectionAssert.AreEqual(new List<int>(), result.Pages.ToList());
+    }
+
+    [Test]
+    public void OrderManualCorrectly_NullManual_ThrowsArgumentNullException()
+    {
+        // Arrange
+        var parser = new Parser();
+        Manual manual = null;
+        var pageOrdering = new List<PageOrderPairs>();
+
+        // Act & Assert
+        Assert.Throws<ArgumentNullException>(() => parser.OrderManualCorrectly(manual, pageOrdering));
+    }
+
+    [Test]
+    public void OrderManualCorrectly_NullPageOrdering_ThrowsArgumentNullException()
+    {
+        // Arrange
+        var parser = new Parser();
+        var manual = new Manual(new List<int> { 1, 2, 3 });
+        IEnumerable<PageOrderPairs> pageOrdering = null;
+
+        // Act & Assert
+        Assert.Throws<ArgumentNullException>(() => parser.OrderManualCorrectly(manual, pageOrdering));
+    }
 }
