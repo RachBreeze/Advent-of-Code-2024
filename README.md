@@ -20,8 +20,10 @@ The repository is organised as follows:
 
 In side the solution the projects and tests are found in the same folder
 
+## Calendar ##
 <a href="https://adventofcode.com/2024"><img src="calendar.jpg" width="80%" /></a>
 
+## Additional Info ##
 In order to respect the [TOS](https://adventofcode.com/2024/about) of this event, this repository will not contain the file inputs and puzzle texts until the end of the event.
 
 Read me style based on https://github.com/Berat02xz/AdventOfCode_2024/
