@@ -37,7 +37,7 @@ internal sealed class Parser : IParser
             throw new InvalidOperationException("No starting direction found");
         }
 
-        var positionVisited = 1;
+        var matchingPostions = new StringCollection();
         var atEdge = false;
         while (!atEdge)
         {
@@ -45,11 +45,13 @@ internal sealed class Parser : IParser
             GetNextPosition(table, ref row, ref column, ref direction, ref atEdge);
             if (!atEdge)
             {
-                positionVisited++;
+                var key = row + "#" + column;
+                if (!matchingPostions.Contains(key))
+                { matchingPostions.Add(key); }
             }
 
         }
-        return positionVisited;
+        return matchingPostions.Count;
     }
 
     internal protected void GetNextPosition(string[,] table, ref int row, ref int column, ref Direction direction, ref bool atEdge)
@@ -95,93 +97,86 @@ internal sealed class Parser : IParser
         throw new InvalidOperationException("Unknown direction");
     }
 
-    private void GetNextPositionRight(string[,] table, ref int row, ref int column, ref Direction direction, ref bool atEdge)
+    internal protected void GetNextPositionRight(string[,] table, ref int row, ref int column, ref Direction direction, ref bool atEdge)
     {
-        var colCount = table.GetLength(1) - 1;
-
-        if (column == colCount)
+        if (direction != Direction.Right)
+        {
+            throw new InvalidOperationException("Invalid direction");
+        }
+        if (column == table.GetLength(1) - 1)
         {
             atEdge = true;
             return;
         }
-        while (column < colCount)
+
+        if (table[row, column + 1] == "#")
         {
-            if (table[row, column + 1] == "#")
-            {
-                direction = Direction.Down;
-                return;
-            }
-            column++;
-
+            direction = Direction.Down;
+            return;
         }
+        column++;
 
-        atEdge = true;
+
     }
 
     internal protected void GetNextPositionLeft(string[,] table, ref int row, ref int column, ref Direction direction, ref bool atEdge)
     {
+        if (direction != Direction.Left)
+        {
+            throw new InvalidOperationException("Invalid direction");
+        }
         if (column == 0)
         {
             atEdge = true;
             return;
         }
-        while (column > 0)
+        if (table[row, column - 1] == "#")
         {
-            if (table[row, column - 1] == "#")
-            {
-                direction = Direction.Up;
-                return;
-            }
-            column--;
+            direction = Direction.Up;
+            return;
         }
+        column--;
 
-        atEdge = true;
     }
 
     internal protected void GetNextPositionDown(string[,] table, ref int row, ref int column, ref Direction direction, ref bool atEdge)
     {
-        var rowCount = table.GetLength(0) - 1;
-
-        if (row == rowCount)
+        if (direction != Direction.Down)
+        {
+            throw new InvalidOperationException("Invalid direction");
+        }
+        if (row == table.GetLength(0) - 1)
         {
             atEdge = true;
             return;
         }
-        while (row < rowCount)
+
+        if (table[row + 1, column] == "#")
         {
-            if (table[row + 1, column] == "#")
-            {
-                direction = Direction.Left;
-                return;
-            }
-            row++;
+            direction = Direction.Left;
+            return;
         }
-        atEdge = true;
+        row++;
+
     }
 
     internal protected void GetNextPositionUp(string[,] table, ref int row, ref int column, ref Direction direction, ref bool atEdge)
     {
+        if (direction != Direction.Up)
+        {
+            throw new InvalidOperationException("Invalid direction");
+        }
         if (row == 0)
         {
             atEdge = true;
             return;
         }
-        while (row > 0)
+        if (table[row - 1, column] == "#")
         {
-            if (row == 28)
-            {
-                System.Diagnostics.Debugger.Break();
-            }
-            if (table[row - 1, column] == "#")
-            {
-                direction = Direction.Right;
-                row++;
-                return;
-            }
-            row--;
+            direction = Direction.Right;
+            return;
         }
-
-        atEdge = true;
+        row--;
     }
 
     internal protected Direction GetDirection(string v)

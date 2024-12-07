@@ -16,7 +16,7 @@ internal sealed class ConsoleApplication
         var input = _readFileContents.AsLines("C:\\GitHub\\Advent-Of-Code-2024\\data\\inputDay6.txt");
 
         var total = _parser.Part1(input);
-        Console.WriteLine("Part 1: " + total);  //!9
+        Console.WriteLine("Part 1: " + total);  //!9 //!126
 
         total = _parser.Part2(input);
         Console.WriteLine("Part 2: " + total);
